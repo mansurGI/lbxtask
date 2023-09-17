@@ -15,7 +15,7 @@ services:
     networks:
       - app
     volumes:
-      - ./symfony/public:/app
+      - ./symfony:/app
   # maridb
   # rabbit
 
