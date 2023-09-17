@@ -7,20 +7,19 @@ services:
     networks:
       - app
     ports:
-      - '80:80'
-      - '443:433'
+      - '180:80'
     volumes:
-      - /nginx/conf.conf:/opt/bitnami/nginx/conf/server_blocks/conf.conf
+      - ./nginx/conf.conf:/opt/bitnami/nginx/conf/server_blocks/conf.conf
   php:
     image: 'bitnami/php-fpm:latest'
     networks:
       - app
     volumes:
-      - /symfony/public:/app
+      - ./symfony/public:/app
   # maridb
   # rabbit
 
 
-netwokrs:
+networks:
   app:
     driver: bridge
