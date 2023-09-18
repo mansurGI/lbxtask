@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Doctrine\ORM\EntityManager;
+use App\Repository\EmployeeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,9 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     #[Route('/', name: 'app_index')]
-    public function index(EntityManager $em): JsonResponse
+    public function index(EmployeeRepository $employeeRepository): JsonResponse
     {
-        dd($em->getConnection()->executeQuery('select * from users;'));
+        dd($employeeRepository->findAll());
         return $this->json([
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/IndexController.php',
