@@ -16,7 +16,16 @@ services:
       - app
     volumes:
       - ./symfony:/app
-  # maridb
+  mariadb:
+    image: 'mariadb:latest'
+    networks:
+      - app
+    ports:
+      - '3306:3306'
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
   # rabbit
 
 
