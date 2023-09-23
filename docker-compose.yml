@@ -1,6 +1,7 @@
 version: '3'
 services:
   nginx:
+    container_name: 'nginx'
     image: 'bitnami/nginx:latest'
     depends_on:
       - php
@@ -11,12 +12,14 @@ services:
     volumes:
       - ./nginx/conf.conf:/opt/bitnami/nginx/conf/server_blocks/conf.conf
   php:
+    container_name: 'fpm'
     image: 'bitnami/php-fpm:latest'
     networks:
       - app
     volumes:
       - ./symfony:/app
   mariadb:
+    container_name: 'mariadb'
     image: 'mariadb:latest'
     networks:
       - app
