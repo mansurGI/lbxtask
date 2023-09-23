@@ -9,6 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
 {
+    const STATUS_DELETED = 'deleted';
+
+    const STATUSES = [
+        self::STATUS_DELETED,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -17,8 +23,14 @@ class Employee
     #[ORM\Column(unique: true)]
     private ?int $uid = null;
 
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $status = null;
+
     #[ORM\Column(length: 255)]
     private ?string $username = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $prefix = null;
 
     #[ORM\Column(length: 255)]
     private ?string $firstname = null;
@@ -285,6 +297,30 @@ class Employee
     public function setRegion(string $region): static
     {
         $this->region = $region;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getPrefix(): ?string
+    {
+        return $this->prefix;
+    }
+
+    public function setPrefix(string $prefix): static
+    {
+        $this->prefix = $prefix;
 
         return $this;
     }
