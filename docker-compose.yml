@@ -19,7 +19,7 @@ services:
     volumes:
       - ./symfony:/app
   mariadb:
-    container_name: 'mariadb'
+    container_name: 'database'
     image: 'mariadb:latest'
     networks:
       - app
