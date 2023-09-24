@@ -2,10 +2,10 @@
 
 echo 'START OF INSTALLING'
 
-echo 'docker upping'
+echo 'docker up'
 docker compose up -d
 
-echo 'compose installing'
+echo 'composer install'
 docker exec fpm php /app/composer.phar install --quiet --no-interaction 
 
 echo 'creating databases'
