@@ -13,8 +13,8 @@ class IndexController extends AbstractController
     public function index(EmployeeRepository $employeeRepository): JsonResponse
     {
         $output = [];
-        exec('php /app/bin/phpunit', $output);
-        array_map(function ($value) { echo $value . PHP_EOL; }, $output);
+        exec('php /app/bin/test.php', $output);
+        //array_map(function ($value) { echo $value . PHP_EOL; }, $output);
         dd($output);
         //dd($employeeRepository->findAll());
         return $this->json([
