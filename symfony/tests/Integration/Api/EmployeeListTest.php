@@ -12,7 +12,7 @@ class EmployeeListTest extends ApiTestCase
      */
     public function testList(): void
     {
-        $response = $this->request('GET', '/api/employee/list');
+        $response = $this->request('GET', '/api/employee');
 
         $this->assertEquals(200, $response['code']);
         $this->assertCount(2, $response['content']);
