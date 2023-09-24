@@ -13,13 +13,13 @@ class EmployeeDeleteTest extends ApiTestCase
      */
     public function testDelete(): void
     {
-        $response = $this->request('DELETE', '/api/employee/1');
+        $response = $this->request('DELETE', '/api/employee/198429');
 
         $this->assertEquals(204, $response['code']);
         $this->assertEmpty($response['content']);
 
         /** @var Employee $employee */
-        $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(['uid' => 1]);
+        $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(['uid' => 198429]);
 
         $this->assertEquals(Employee::STATUS_DELETED, $employee->getStatus());
     }
