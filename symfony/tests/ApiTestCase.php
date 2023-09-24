@@ -14,7 +14,7 @@ class ApiTestCase extends KernelTestCase
         /** @var KernelBrowser $client */
         $client = self::getContainer()->get('test.client');
 
-        $client->request($method, $uri, $parameters, $files);
+        $client->request($method, $uri, $parameters, $files, ['HTTP_ACCEPT' => 'application/json']);
 
         $response = $client->getResponse();
 
