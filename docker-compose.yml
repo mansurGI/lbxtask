@@ -11,14 +11,15 @@ services:
       - '180:80'
     volumes:
       - ./nginx/conf.conf:/opt/bitnami/nginx/conf/server_blocks/conf.conf
-  php:
+  fpm:
     container_name: 'fpm'
     image: 'bitnami/php-fpm:latest'
     networks:
       - app
     volumes:
       - ./symfony:/app
-  mariadb:
+      - ./fpm/custom.ini:/opt/bitnami/php/etc/conf.d/custom.ini
+  database:
     container_name: 'database'
     image: 'mariadb:latest'
     networks:
