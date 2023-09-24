@@ -19,7 +19,7 @@ class ApiTestCase extends KernelTestCase
         $response = $client->getResponse();
 
         try {
-            $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $content = json_decode((empty($response->getContent())) ? '[]' : $response->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (\Exception $e) {
             var_dump($e->getMessage(), $response->getContent(), $e);
         }
