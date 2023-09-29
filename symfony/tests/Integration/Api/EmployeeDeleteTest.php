@@ -4,6 +4,7 @@ namespace App\Tests\Integration\Api;
 
 use App\Entity\Employee;
 use App\Tests\ApiTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmployeeDeleteTest extends ApiTestCase
 {
@@ -15,7 +16,7 @@ class EmployeeDeleteTest extends ApiTestCase
     {
         $response = $this->request('DELETE', '/api/employee/198429');
 
-        $this->assertEquals(204, $response['code']);
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response['code']);
         $this->assertEmpty($response['content']);
 
         /** @var Employee $employee */

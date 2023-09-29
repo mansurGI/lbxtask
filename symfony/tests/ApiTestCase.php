@@ -8,13 +8,17 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ApiTestCase extends KernelTestCase
 {
-    #[ArrayShape(['code' => "int", 'content' => "array"])]
-    public function request($method, $uri, $parameters = [], $files = []): array
+    #[ArrayShape(['code' => "int", 'content' => "array", 'raw' => "string"])]
+    public function request($method, $uri, $payload = null, $mocks = [], $parameters = [], $files = []): array
     {
+        foreach ($mocks as $id => $object) {
+            self::getContainer()->set($id, $object);
+        }
+
         /** @var KernelBrowser $client */
         $client = self::getContainer()->get('test.client');
 
-        $client->request($method, $uri, $parameters, $files, ['HTTP_ACCEPT' => 'application/json']);
+        $client->request($method, $uri, $parameters, $files, ['HTTP_ACCEPT' => 'application/json'], $payload);
 
         $response = $client->getResponse();
 
@@ -27,6 +31,7 @@ class ApiTestCase extends KernelTestCase
         return [
             'code' => $response->getStatusCode(),
             'content' => $content,
+            'raw' => $response->getContent(),
         ];
     }
 

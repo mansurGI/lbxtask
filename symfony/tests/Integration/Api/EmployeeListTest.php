@@ -3,6 +3,7 @@
 namespace App\Tests\Integration\Api;
 
 use App\Tests\ApiTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class EmployeeListTest extends ApiTestCase
 {
@@ -14,7 +15,7 @@ class EmployeeListTest extends ApiTestCase
     {
         $response = $this->request('GET', '/api/employee');
 
-        $this->assertEquals(200, $response['code']);
+        $this->assertEquals(Response::HTTP_OK, $response['code']);
         $this->assertCount(2, $response['content']);
         $this->assertEquals('serafina.bumgarner@exxonmobil.com', $response['content'][0]['email']);
     }
