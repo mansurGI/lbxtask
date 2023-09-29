@@ -24,5 +24,5 @@ services:
     # please note that last definitions always *replace* previous ones
 
     App\Storage\LocalStorage:
-        parameters:
+        arguments:
             storagePath: '%kernel.project_dir%/var/storage'
