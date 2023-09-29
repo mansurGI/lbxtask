@@ -25,4 +25,4 @@ services:
 
     App\Storage\LocalStorage:
         arguments:
-            storagePath: '%kernel.project_dir%/var/storage'
+            $storagePath: '%kernel.project_dir%/var/storage'
