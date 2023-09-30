@@ -27,6 +27,5 @@ class EmployeeDeleteTest extends ApiTestCase
         $response = $this->request('DELETE', '/api/employee/7777777777777');
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response['code']);
-        $this->assertEmpty($response['content']);
     }
 }

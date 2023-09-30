@@ -20,6 +20,6 @@ class EmployeeOneTest extends ApiTestCase
 
         $response = $this->request('GET', '/api/employee/7777777777777');
 
-        $this->assertEquals(Response::HTTP_OK, $response['code']);
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response['code']);
     }
 }
