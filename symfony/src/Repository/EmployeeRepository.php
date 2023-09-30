@@ -21,6 +21,19 @@ class EmployeeRepository extends ServiceEntityRepository
         parent::__construct($registry, Employee::class);
     }
 
+    /**
+     * @param int $amount The maximum amount of Employees
+     * @return Employee[] Returns an array of newest Employees
+     */
+    public function findLatest(int $amount = 100): array
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.id', 'DESC')
+            ->setMaxResults($amount)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
 //    /**
 //     * @return Employee[] Returns an array of Employee objects
 //     */

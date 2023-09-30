@@ -57,16 +57,16 @@ class EmployeeImportTest extends ApiTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response['code']);
         $this->assertEquals(['status' => 'done'], $response['content']);
-    }
-
-    // Almost a duplicate of a previous test bcz of:
-    // TODO: in order to have a multiple request with different mocks we have to shut Kernel down,
-    // TODO: boot it and add mock for every request
-    /**
-     * @covers \App\Controller\Api\EmployeeController::import()
-     */
-    public function testImportMocked2()
-    {
+//    }
+//
+//    // Almost a duplicate of a previous test bcz of:
+//    // TODO: in order to have a multiple request with different mocks we have to shut Kernel down,
+//    // TODO: boot it and add mock for every request
+//    /**
+//     * @covers \App\Controller\Api\EmployeeController::import()
+//     */
+//    public function testImportMocked2()
+//    {
         $csvFileManagerMock = $this->createMock(CsvFileManager::class);
         $csvFileManagerMock->method('upload')->willThrowException(
             new IOException('Unable to create a file')

@@ -21,7 +21,7 @@ class EmployeeController extends AbstractController
     #[Route('/api/employee', name: 'app_employee_list', methods: ['GET', 'OPTIONS'])]
     public function list(EmployeeRepository $employeeRepository): JsonResponse
     {
-        return $this->json($employeeRepository->findAll(), Response::HTTP_OK);
+        return $this->json($employeeRepository->findLatest(), Response::HTTP_OK);
     }
 
     #[Route('/api/employee/{uid}', name: 'app_employee_one', methods: ['GET', 'OPTIONS'])]
@@ -63,6 +63,7 @@ class EmployeeController extends AbstractController
         try {
             $path = $csvManager->upload($content);
         } catch (\Exception $exception) {
+            //TODO: logging or handling exceptions
             return $this->json(['status' => 'server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
