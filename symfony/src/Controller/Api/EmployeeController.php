@@ -5,7 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Employee;
 use App\Repository\EmployeeRepository;
 use App\Service\CsvFileManager;
-use App\Validator\IsCsv;
+use App\Validator as CustomAssert;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,10 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EmployeeController extends AbstractController
@@ -50,11 +47,13 @@ class EmployeeController extends AbstractController
         $content = $request->getContent();
 
         $errors = $validator->validate($content, [
-            new NotBlank(),
-            new NotNull(),
-            new Type('string'),
-            new Length(min: 1),
-            new IsCsv()
+            new Assert\Sequentially([
+                new Assert\NotBlank(),
+                new Assert\NotNull(),
+                new Assert\Type('string'),
+                new Assert\Length(min: 1),
+                new CustomAssert\IsCsv(),
+            ]),
         ]);
 
         if (count($errors) > 0) {
