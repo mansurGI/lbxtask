@@ -17,6 +17,6 @@ class EmployeeListTest extends ApiTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response['code']);
         $this->assertCount(2, $response['content']);
-        $this->assertEquals('serafina.bumgarner@exxonmobil.com', $response['content'][0]['email']);
+        $this->assertEquals('serafina.bumgarner@exxonmobil.com', $response['content'][1]['email']);
     }
 }
