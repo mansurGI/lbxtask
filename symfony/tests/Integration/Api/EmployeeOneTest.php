@@ -17,5 +17,9 @@ class EmployeeOneTest extends ApiTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response['code']);
         $this->assertEquals('serafina.bumgarner@exxonmobil.com', $response['content']['email']);
+
+        $response = $this->request('GET', '/api/employee/7777777777777');
+
+        $this->assertEquals(Response::HTTP_OK, $response['code']);
     }
 }

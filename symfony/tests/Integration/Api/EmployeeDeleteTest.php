@@ -23,5 +23,10 @@ class EmployeeDeleteTest extends ApiTestCase
         $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(['uid' => 198429]);
 
         $this->assertEquals(Employee::STATUS_DELETED, $employee->getStatus());
+
+        $response = $this->request('DELETE', '/api/employee/7777777777777');
+
+        $this->assertEquals(Response::HTTP_NOT_FOUND, $response['code']);
+        $this->assertEmpty($response['content']);
     }
 }
