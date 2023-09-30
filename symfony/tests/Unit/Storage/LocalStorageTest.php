@@ -23,11 +23,12 @@ class LocalStorageTest extends TestCase
         $this->assertEquals('/not/real/path/success-file.txt', $result);
 
 
-        $IOException = new IOException('Unable to create a file');
-        $this->expectException($IOException);
+        $this->expectException(new IOException('Unable to create a file'));
 
         $filesystemMock = $this->createMock(Filesystem::class);
-        $filesystemMock->method('dumpFile')->willThrowException($IOException);
+        $filesystemMock->method('dumpFile')->willThrowException(
+            new IOException('Unable to create a file')
+        );
 
         (new LocalStorage($filesystemMock, '/not/real/path'))
             ->save('some content', 'success-file.txt');

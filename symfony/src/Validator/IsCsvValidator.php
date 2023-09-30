@@ -9,10 +9,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class IsCsvValidator extends ConstraintValidator
 {
-    /**
-     * @inheritDoc
-     */
-    public function validate(mixed $value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (false === $constraint instanceof IsCsv) {
             throw new UnexpectedTypeException($constraint, IsCsv::class);

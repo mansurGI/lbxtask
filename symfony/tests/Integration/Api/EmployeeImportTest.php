@@ -39,7 +39,7 @@ class EmployeeImportTest extends ApiTestCase
         ];
     }
 
-    public function testImportWithMocks()
+    public function testImportMocked()
     {
         $csvFileManagerMock = $this->createMock(CsvFileManager::class);
         $csvFileManagerMock->method('upload')->willReturn('uploaded_file.csv');
@@ -54,7 +54,11 @@ class EmployeeImportTest extends ApiTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response['code']);
         $this->assertEquals(['status' => 'done'], $response['content']);
+    }
 
+    // Almost a duplicate of a previous test - don't want to spend time on handling kernel shutdown for mocking services
+    public function testImportMocked2()
+    {
         $csvFileManagerMock = $this->createMock(CsvFileManager::class);
         $csvFileManagerMock->method('upload')->willThrowException(
             new IOException('Unable to create a file'),

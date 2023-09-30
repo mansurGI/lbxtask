@@ -46,7 +46,7 @@ class EmployeeController extends AbstractController
     #[Route('/api/employee', name: 'app_employee_import', methods: ['POST', 'OPTIONS'])]
     public function import(Request $request, ValidatorInterface $validator, CsvFileManager $csvManager): JsonResponse
     {
-        $content = $request->getContent(true);
+        $content = $request->getContent();
 
         $errors = $validator->validate($content, [
             new NotBlank(),
