@@ -78,11 +78,15 @@ class EmployeeImportTest extends ApiTestCase
             new IOException('Unable to create a file')
         );
 
+        $messengerMock = $this->createMock(MessageBus::class);
+        $messengerMock->method('dispatch')->willReturn(new Envelope(new \stdClass()));
+
         $response = $this->request(
             'POST', '/api/employee',
             'Id, Name, Age' . PHP_EOL . '0, David, 20' . PHP_EOL . '1, Steve, 19',
             [
                 CsvFileManager::class => $csvFileManagerMock,
+                MessageBus::class => $messengerMock,
             ]
         );
 
