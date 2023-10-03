@@ -4,9 +4,7 @@ echo 'START OF INSTALLING'
 
 echo 'building docker'
 cd fpm || exit
-
 docker build --quiet --tag php-fpm-custom:latest .
-
 cd ..
 
 echo 'docker up'

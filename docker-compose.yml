@@ -38,8 +38,8 @@ services:
     ports:
       - '5672:5672'
     environment:
-      RABBITMQ_USERNAME: 'guest'
-      RABBITMQ_PASSWORD: 'guest'
+      RABBITMQ_USERNAME: 'root'
+      RABBITMQ_PASSWORD: 'root'
 
 
 networks:
