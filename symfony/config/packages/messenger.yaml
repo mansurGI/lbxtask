@@ -5,18 +5,18 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-             async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
-             retry_strategy:
-                 max_retries: 5
-                 delay: 1000
+            retry_strategy:
+                max_retries: 5
+                delay: 1000
 
 
         routing:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
-             'App\Message\CsvUploaded': async
+            'App\Message\CsvUploaded': async
 
 # when@test:
 #    framework:
