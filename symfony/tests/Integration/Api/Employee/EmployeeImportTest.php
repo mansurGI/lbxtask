@@ -6,8 +6,7 @@ use App\Service\CsvFileManager;
 use App\Tests\ApiTestCase;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\MessageBus;
+use Symfony\Component\Messenger\Transport\InMemory\InMemoryTransport;
 
 class EmployeeImportTest extends ApiTestCase
 {
@@ -49,17 +48,17 @@ class EmployeeImportTest extends ApiTestCase
         $csvFileManagerMock = $this->createMock(CsvFileManager::class);
         $csvFileManagerMock->method('upload')->willReturn('uploaded_file.csv');
 
-        $messengerMock = $this->createMock(MessageBus::class);
-        $messengerMock->method('dispatch')->willReturn(new Envelope(new \stdClass()));
-
         $response = $this->request(
             'POST', '/api/employee',
             'Id, Name, Age' . PHP_EOL . '0, David, 20' . PHP_EOL . '1, Steve, 19',
             [
                 CsvFileManager::class => $csvFileManagerMock,
-                MessageBus::class => $messengerMock,
             ]
         );
+
+        /** @var InMemoryTransport $transport */
+        $transport = $this->getContainer()->get('messenger.transport.async');
+        $this->assertCount(1, $transport->getSent());
 
         $this->assertEquals(Response::HTTP_OK, $response['code']);
         $this->assertEquals(['status' => 'done'], $response['content']);
@@ -78,15 +77,11 @@ class EmployeeImportTest extends ApiTestCase
             new IOException('Unable to create a file')
         );
 
-        $messengerMock = $this->createMock(MessageBus::class);
-        $messengerMock->method('dispatch')->willReturn(new Envelope(new \stdClass()));
-
         $response = $this->request(
             'POST', '/api/employee',
             'Id, Name, Age' . PHP_EOL . '0, David, 20' . PHP_EOL . '1, Steve, 19',
             [
                 CsvFileManager::class => $csvFileManagerMock,
-                MessageBus::class => $messengerMock,
             ]
         );
 
