@@ -6,6 +6,7 @@ use App\Service\CsvFileManager;
 use App\Tests\ApiTestCase;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBus;
 
 class EmployeeImportTest extends ApiTestCase
@@ -49,7 +50,7 @@ class EmployeeImportTest extends ApiTestCase
         $csvFileManagerMock->method('upload')->willReturn('uploaded_file.csv');
 
         $messengerMock = $this->createMock(MessageBus::class);
-        $messengerMock->method('dispatch')->willReturn('');
+        $messengerMock->method('dispatch')->willReturn(new Envelope(new \stdClass()));
 
         $response = $this->request(
             'POST', '/api/employee',
