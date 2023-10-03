@@ -2,5 +2,5 @@
 
 docker compose down
 
-docker rmi bitnami/nginx bitnami/php-fpm mariadb bitnami/rabbitmq
+docker rmi bitnami/nginx php-fpm-custom mariadb bitnami/rabbitmq
 

@@ -13,7 +13,7 @@ services:
       - ./nginx/conf.conf:/opt/bitnami/nginx/conf/server_blocks/conf.conf
   fpm:
     container_name: 'fpm'
-    image: 'bitnami/php-fpm:latest'
+    image: 'php-fpm-custom:latest'
     networks:
       - app
     volumes:
