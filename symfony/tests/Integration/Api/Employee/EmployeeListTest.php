@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Integration\Api;
+namespace App\Tests\Integration\Api\Employee;
 
 use App\Tests\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;

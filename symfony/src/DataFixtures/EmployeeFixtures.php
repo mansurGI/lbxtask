@@ -29,7 +29,7 @@ class EmployeeFixtures extends Fixture
         $employee->setRegion('Northeast');
         $employee->setStatus(null);
         $employee->setTenure(9.49);
-        $employee->setUid(198429);
+        $employee->setEid(198429);
         $employee->setUsername('sibumgarner');
         $employee->setZipcode(14724);
 
@@ -55,7 +55,7 @@ class EmployeeFixtures extends Fixture
         $employee2->setRegion('Northeast');
         $employee2->setStatus(null);
         $employee2->setTenure(6.15);
-        $employee2->setUid(178566);
+        $employee2->setEid(178566);
         $employee2->setUsername('jmrojo');
         $employee2->setZipcode(19038);
 

@@ -9,9 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
 {
-    const STATUS_DELETED = 'deleted';
+    public const STATUS_DELETED = 'deleted';
 
-    const STATUSES = [
+    public const STATUSES = [
         self::STATUS_DELETED,
     ];
 
@@ -21,7 +21,7 @@ class Employee
     private ?int $id = null;
 
     #[ORM\Column(unique: true)]
-    private ?int $uid = null;
+    private ?int $eid = null;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $status = null;
@@ -62,6 +62,7 @@ class Employee
     #[ORM\Column(length: 12)]
     private ?string $phone = null;
 
+    // tenure = age in company in years
     #[ORM\Column(length: 5, precision: 2)]
     private ?float $tenure = null;
 
@@ -85,14 +86,14 @@ class Employee
         return $this->id;
     }
 
-    public function getUid(): ?int
+    public function getEid(): ?int
     {
-        return $this->uid;
+        return $this->eid;
     }
 
-    public function setUid(int $uid): static
+    public function setEid(int $eid): static
     {
-        $this->uid = $uid;
+        $this->eid = $eid;
 
         return $this;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Integration\Api;
+namespace App\Tests\Integration\Api\Employee;
 
 use App\Service\CsvFileManager;
 use App\Tests\ApiTestCase;

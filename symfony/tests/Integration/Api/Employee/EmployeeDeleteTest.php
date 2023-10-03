@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Integration\Api;
+namespace App\Tests\Integration\Api\Employee;
 
 use App\Entity\Employee;
 use App\Tests\ApiTestCase;
@@ -20,7 +20,7 @@ class EmployeeDeleteTest extends ApiTestCase
         $this->assertEmpty($response['content']);
 
         /** @var Employee $employee */
-        $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(['uid' => 198429]);
+        $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(['eid' => 198429]);
 
         $this->assertEquals(Employee::STATUS_DELETED, $employee->getStatus());
 

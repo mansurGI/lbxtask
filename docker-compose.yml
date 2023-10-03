@@ -30,7 +30,16 @@ services:
       MARIADB_ROOT_PASSWORD: root
     volumes:
       - ./mariadb/data:/var/lib/mysql
-  # rabbit
+  rabbit:
+    container_name: 'rabbit'
+    image: 'bitnami/rabbitmq:latest'
+    networks:
+      - app
+    ports:
+      - '5672:5672'
+    environment:
+      RABBITMQ_USERNAME: 'guest'
+      RABBITMQ_PASSWORD: 'guest'
 
 
 networks:

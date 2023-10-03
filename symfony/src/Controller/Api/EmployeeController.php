@@ -3,15 +3,18 @@
 namespace App\Controller\Api;
 
 use App\Entity\Employee;
+use App\Message\CsvUploaded;
 use App\Repository\EmployeeRepository;
 use App\Service\CsvFileManager;
 use App\Validator as CustomAssert;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -24,14 +27,17 @@ class EmployeeController extends AbstractController
         return $this->json($employeeRepository->findLatest(), Response::HTTP_OK);
     }
 
-    #[Route('/api/employee/{uid}', name: 'app_employee_one', methods: ['GET', 'OPTIONS'])]
-    public function one(#[MapEntity(mapping: ['uid' => 'uid'])] Employee $employee): JsonResponse
+    #[Route('/api/employee/{eid}', name: 'app_employee_one', methods: ['GET', 'OPTIONS'])]
+    public function one(#[MapEntity(mapping: ['eid' => 'eid'])] Employee $employee): JsonResponse
     {
         return $this->json($employee, Response::HTTP_OK);
     }
 
-    #[Route('/api/employee/{uid}', name: 'app_employee_delete', methods: ['DELETE'])]
-    public function delete(#[MapEntity(mapping: ['uid' => 'uid'])] Employee $employee, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/api/employee/{eid}', name: 'app_employee_delete', methods: ['DELETE'])]
+    public function delete(
+        #[MapEntity(mapping: ['eid' => 'eid'])] Employee $employee,
+        EntityManagerInterface $entityManager,
+    ): JsonResponse
     {
         $employee->setStatus(Employee::STATUS_DELETED);
 
@@ -42,7 +48,13 @@ class EmployeeController extends AbstractController
     }
 
     #[Route('/api/employee', name: 'app_employee_import', methods: ['POST', 'OPTIONS'])]
-    public function import(Request $request, ValidatorInterface $validator, CsvFileManager $csvManager): JsonResponse
+    public function import(
+        Request $request,
+        ValidatorInterface $validator,
+        CsvFileManager $csvManager,
+        MessageBusInterface $bus,
+        LoggerInterface $logger,
+    ): JsonResponse
     {
         $content = $request->getContent();
 
@@ -62,13 +74,14 @@ class EmployeeController extends AbstractController
 
         try {
             $path = $csvManager->upload($content);
-        } catch (\Exception $exception) {
-            //TODO: logging or handling exceptions
+        } catch (\Throwable $exception) {
+            $logger->error('Unable to save csv', [
+                'exception' => $exception,
+            ]);
             return $this->json(['status' => 'server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //send to rabbit
-        //catch any errors and send a msg to user
+        $bus->dispatch(new CsvUploaded($path));
 
         return $this->json(['status' => 'done'], Response::HTTP_OK);
     }
