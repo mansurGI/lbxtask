@@ -2,26 +2,19 @@
 
 namespace App\MessageHandler;
 
-use App\Entity\Employee;
-use App\FieldSet\EmployeeFieldSet;
 use App\Message\CsvUploaded;
 use App\Service\CsvFileManager;
-use Doctrine\ORM\EntityManagerInterface;
-use League\Csv\Reader;
+use App\Service\CsvImportService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsMessageHandler]
 class CsvUploadedHandler
 {
     public function __construct(
-        private readonly CsvFileManager         $csvFileManager,
-        private readonly ObjectNormalizer       $normalizer,
-        private readonly ValidatorInterface     $validator,
-        private readonly EntityManagerInterface $doctrine,
-        private readonly LoggerInterface        $logger,
+        private readonly CsvFileManager   $csvFileManager,
+        private readonly LoggerInterface  $logger,
+        private readonly CsvImportService $importService,
     )
     {
     }
@@ -31,42 +24,16 @@ class CsvUploadedHandler
         $path = $this->csvFileManager->getPath($csvUploaded->getFileName());
 
         try {
-            $reader = Reader::createFromPath($path, 'r');
-            $records = $reader->getRecords(EmployeeFieldSet::toArray());
+            $this->importService->process($path);
         } catch (\Throwable $exception) {
-            $this->logger->error('Unable to get csv', [
+            $this->logger->error('Error on csv import', [
                 'exception' => $exception,
             ]);
-            return;
+            throw new \LogicException('Error on csv importing');
         }
 
-        $count = 0;
-        foreach ($records as $record) {
-            /** @var Employee $employee */
-            $employee = $this->normalizer->denormalize($record, Employee::class);
-
-            $errors = $this->validator->validate($employee);
-            if (count($errors) > 0) {
-                continue;
-            }
-
-//            if (null !== $this->doctrine->getRepository(Employee::class)->findOneBy(['eid' => $employee->getEid()])) {
-//                continue;
-//            }
-
-            $this->doctrine->persist($employee);
-            $count++;
-
-            if ($count >= 20) {
-                $this->doctrine->flush();
-                $this->doctrine->clear();
-                $count = 0;
-            }
-        }
-
-        if ($count !== 0) {
-            $this->doctrine->flush();
-            $this->doctrine->clear();
-        }
+        $this->logger->info('Completed csv import for {path}', [
+            'path' => $path,
+        ]);
     }
 }
