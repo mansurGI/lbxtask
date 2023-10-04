@@ -6,9 +6,6 @@ use App\Entity\Employee;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-/**
- * @method  getSupportedTypes(?string $format)
- */
 class EmployeeSerializer implements DenormalizerInterface
 {
 
@@ -23,11 +20,11 @@ class EmployeeSerializer implements DenormalizerInterface
         $data['eid'] = (int)$data['eid'];
 
         $object = $this->objectNormalizer->denormalize($data, $type, $format, $context);
-        
+
         return $object;
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
     {
         return $type === Employee::class;
     }
