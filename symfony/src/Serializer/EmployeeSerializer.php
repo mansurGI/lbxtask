@@ -15,7 +15,7 @@ class EmployeeSerializer implements DenormalizerInterface
     {
     }
 
-    public function denormalize(mixed $data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): mixed
     {
         $data['eid'] = (int)$data['eid'];
 
@@ -27,5 +27,10 @@ class EmployeeSerializer implements DenormalizerInterface
     public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
     {
         return $type === Employee::class;
+    }
+
+    public function getSupportedTypes(?string $format): string
+    {
+        return Employee::class;
     }
 }
