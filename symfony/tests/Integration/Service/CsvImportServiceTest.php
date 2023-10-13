@@ -21,7 +21,7 @@ class CsvImportServiceTest extends KernelTestCase
         /** @var EntityManagerInterface $doctrine */
         $doctrine = self::getContainer()->get(EntityManagerInterface::class);
 
-        //fixtures from test.php will add 2 employees
+        //fixtures from test.php will add 2 employees TODO: database purge, fixtures before each test
         $this->assertCount($insertions + 2, $doctrine->getRepository(Employee::class)->findAll());
     }
 
@@ -59,7 +59,7 @@ class CsvImportServiceTest extends KernelTestCase
                     '953724,Mrs.,Nanci,D,Osorio,F,nanci.osorio@hotmail.com,7/9/1982,12:02:26 PM,35.08,11/7/2003,13.73,603-298-3198,Lincoln,Grafton,Lincoln,3251,Northeast,ndosorio',
                     '138700,Ms.,Maricela,H,Simard,F,maricela.simard@gmail.com,7/21/1988,07:06:17 PM,29.04,9/25/2016,0.84,252-383-7726,Ingold,Sampson,Ingold,28446,South,mhsimard',
                 ]),
-                'insertions' => 3,
+                'insertions' => 4, // 3 + 1 (previous data)
             ],
             [
                 'csv' => implode(PHP_EOL, [
@@ -77,9 +77,9 @@ class CsvImportServiceTest extends KernelTestCase
                     '423093,Mr.,Eric,O,Manning,M,eric.manning@yahoo.com,11/2/1980,08:48:01 PM,36.76,10/28/2002,14.76,319-913-5811,Clermont,Fayette,Clermont,52135,Midwest,eomanning',
                     '207808,Ms.,Renetta,T,Hafner,F,renetta.hafner@aol.com,1/29/1975,11:50:51 AM,42.52,8/22/1998,18.95,239-664-4998,Fort Lauderdale,Broward,Fort Lauderdale,33335,South,rthafner',
                     '338634,Ms.,Paz,T,Pearman,F,paz.pearman@gmail.com,2/28/1960,08:35:18 PM,57.45,5/25/1982,35.2,319-435-3438,Garnavillo,Clayton,Garnavillo,52049,Midwest,ptpearman',
-                    '324573,Hon.,Ardath,Q,Forman,F,ardath.forman@gmail.com,11/12/1982,04:54:17 AM,34.73,10/16/2009,7.79,229-447-5924,Athens,Clarke,Athens,30602,South,aqforman',
-                    '953724,Mrs.,Nanci,D,Osorio,F,nanci.osorio@hotmail.com,7/9/1982,12:02:26 PM,35.08,11/7/2003,13.73,603-298-3198,Lincoln,Grafton,Lincoln,3251,Northeast,ndosorio',
-                    '138700,Ms.,Maricela,H,Simard,F,maricela.simard@gmail.com,7/21/1988,07:06:17 PM,29.04,9/25/2016,0.84,252-383-7726,Ingold,Sampson,Ingold,28446,South,mhsimard',
+                    '324580,Hon.,Ardath,Q,Forman,F,ardath.forman@gmail.com,11/12/1982,04:54:17 AM,34.73,10/16/2009,7.79,229-447-5924,Athens,Clarke,Athens,30602,South,aqforman',
+                    '953777,Mrs.,Nanci,D,Osorio,F,nanci.osorio@hotmail.com,7/9/1982,12:02:26 PM,35.08,11/7/2003,13.73,603-298-3198,Lincoln,Grafton,Lincoln,3251,Northeast,ndosorio',
+                    '138780,Ms.,Maricela,H,Simard,F,maricela.simard@gmail.com,7/21/1988,07:06:17 PM,29.04,9/25/2016,0.84,252-383-7726,Ingold,Sampson,Ingold,28446,South,mhsimard',
                     '644265,Ms.,Avelina,I,Stoner,F,avelina.stoner@exxonmobil.com,10/1/1988,12:15:44 PM,28.84,11/30/2010,6.66,215-329-1990,Salina,Westmoreland,Salina,15680,Northeast,aistoner',
                     '223871,Drs.,Christene,O,Mattison,F,christene.mattison@gmail.com,9/14/1990,09:43:32 AM,26.89,9/13/2015,1.87,314-561-9256,Alba,Jasper,Alba,64830,Midwest,comattison',
                     '807262,Mr.,Stefan,O,Maeda,M,stefan.maeda@yahoo.com,3/23/1990,09:14:56 AM,27.37,11/5/2011,5.73,225-889-6869,Slidell,St. Tammany,Slidell,70461,South,somaeda',
@@ -87,7 +87,7 @@ class CsvImportServiceTest extends KernelTestCase
                     '807442,Hon.,Ed,E,Ferrari,M,ed.ferrari@gmail.com,9/27/1981,07:31:47 AM,35.86,2/15/2015,2.45,210-319-0049,Gardendale,Ector,Gardendale,79758,South,eeferrari',
                     '956778,Ms.,Jewell,L,Thies,F,jewell.thies@aol.com,2/16/1991,11:29:52 AM,26.46,4/28/2017,0.25,405-727-5191,Oklahoma City,Oklahoma City,Oklahoma City,73100,South,jlthies',
                 ]),
-                'insertions' => 21,
+                'insertions' => 25, // 21 + 4 (previous data)
             ],
         ];
     }
