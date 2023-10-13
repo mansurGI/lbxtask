@@ -66,11 +66,11 @@ class Employee
     private ?string $email = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $birthDate = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    #[Assert\DateTime]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $birthTime = null;
 
     #[ORM\Column(length: 5, precision: 2)]
@@ -79,7 +79,7 @@ class Employee
     private ?float $age = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\DateTime]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $joinDate = null;
 
     #[ORM\Column(length: 12)]
