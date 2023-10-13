@@ -49,10 +49,14 @@ class CsvImportService
 
         $inserted = 0;
         foreach ($records as $record) {
-            /** @var Employee $employee */
-            $employee = $this->serializer->denormalize($record, Employee::class, null, [
-                'disable_type_enforcement' => true,
-            ]);
+            try {
+                /** @var Employee $employee */
+                $employee = $this->serializer->denormalize($record, Employee::class, null, [
+                    'disable_type_enforcement' => true,
+                ]);
+            } catch (\Throwable $exception) {
+                continue;
+            }
 
             $errors = $this->validator->validate($employee);
             if (count($errors) > 0) {
