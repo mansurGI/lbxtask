@@ -3,10 +3,9 @@
 namespace App\Controller\Api;
 
 use App\Entity\Employee;
-use App\Message\CsvUploaded;
+use App\Message\CsvUploadedMessage;
 use App\Repository\EmployeeRepository;
 use App\Service\CsvFileManager;
-use App\Validator as CustomAssert;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -16,8 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EmployeeController extends AbstractController
 {
@@ -50,38 +47,24 @@ class EmployeeController extends AbstractController
     #[Route('/api/employee', name: 'app_employee_import', methods: ['POST', 'OPTIONS'])]
     public function import(
         Request $request,
-        ValidatorInterface $validator,
         CsvFileManager $csvManager,
         MessageBusInterface $bus,
         LoggerInterface $logger,
     ): JsonResponse
     {
-        $content = $request->getContent();
-
-        $errors = $validator->validate($content, [
-            new Assert\Sequentially([
-                new Assert\NotBlank(),
-                new Assert\NotNull(),
-                new Assert\Type('string'),
-                new Assert\Length(min: 1),
-                new CustomAssert\IsCsv(),
-            ]),
-        ]);
-
-        if (count($errors) > 0) {
-            return $this->json(['status' => 'error in fields', 'errors' => $errors], Response::HTTP_BAD_REQUEST);
-        }
+        $content = $request->getContent(true);
 
         try {
-            $path = $csvManager->upload($content);
+            $filename = $csvManager->upload($content);
         } catch (\Throwable $exception) {
             $logger->error('Unable to save csv', [
                 'exception' => $exception,
+                'content_meta_data' => stream_get_meta_data($content),
             ]);
             return $this->json(['status' => 'server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $bus->dispatch(new CsvUploaded($path));
+        $bus->dispatch(new CsvUploadedMessage($filename));
 
         return $this->json(['status' => 'done'], Response::HTTP_OK);
     }

@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Storage\Exceptions\NotFoundException;
+use App\Storage\Exceptions\UnableToSaveException;
 use App\Storage\StorageInterface;
 
 class CsvFileManager
@@ -12,6 +14,11 @@ class CsvFileManager
     {
     }
 
+    /**
+     * @param resource $content
+     * @return string
+     * @throws UnableToSaveException
+     */
     public function upload($content): string
     {
         $name = $this->generateName();
@@ -21,7 +28,12 @@ class CsvFileManager
         return $name;
     }
 
-    public function getPath($name)
+    /**
+     * @param string $name
+     * @return resource
+     * @throws NotFoundException
+     */
+    public function download(string $name)
     {
         return $this->storage->get($name);
     }

@@ -34,6 +34,27 @@ class EmployeeRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    /**
+     * Insert with ignore statement
+     *
+     * @param array $params Employee as array
+     * @return void
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function insertIgnore(array $params): void
+    {
+        $sql = $this->getEntityManager()->getConnection()->createQueryBuilder()
+            ->insert($this->getEntityName())
+            ->values(array_fill_keys(array_keys($params), '?'))
+            ->setParameters($params)
+            ->getSQL();
+
+        $this->getEntityManager()->getConnection()->executeStatement(
+            str_replace('INSERT', 'INSERT IGNORE', $sql),
+            array_values($params),
+        );
+    }
+
 //    /**
 //     * @return Employee[] Returns an array of Employee objects
 //     */

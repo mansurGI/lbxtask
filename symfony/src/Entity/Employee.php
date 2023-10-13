@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\EmployeeRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
@@ -21,64 +22,100 @@ class Employee
     private ?int $id = null;
 
     #[ORM\Column(unique: true)]
+    #[Assert\Type(type: 'int')]
+    #[Assert\PositiveOrZero]
     private ?int $eid = null;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $status = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(min: 1, max: 255)]
     private ?string $username = null;
 
     #[ORM\Column(length: 10)]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(min: 1, max: 10)]
     private ?string $prefix = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(min: 1, max: 255)]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 1)]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(exactly: 1)]
     private ?string $middleInitial = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(min: 1, max: 255)]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 1)]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(min: 1)]
     private ?string $gender = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Length(min: 1, max: 255)]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\Date]
     private ?\DateTimeInterface $birthDate = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
+    #[Assert\Time]
     private ?\DateTimeInterface $birthTime = null;
 
     #[ORM\Column(length: 5, precision: 2)]
+    #[Assert\Type(type: 'numeric')]
+    #[Assert\Positive]
     private ?float $age = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\Date]
     private ?\DateTimeInterface $joinDate = null;
 
     #[ORM\Column(length: 12)]
+    #[Assert\Type('string')]
+    #[Assert\Length(min: 1)]
     private ?string $phone = null;
 
     // tenure = age in company in years
     #[ORM\Column(length: 5, precision: 2)]
+    #[Assert\Type(type: 'numeric')]
+    #[Assert\Positive]
     private ?float $tenure = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
+    #[Assert\Length(min: 1, max: 255)]
     private ?string $place = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
+    #[Assert\Length(min: 1, max: 255)]
     private ?string $county = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Type('string')]
+    #[Assert\Length(min: 1, max: 255)]
     private ?string $city = null;
 
     #[ORM\Column]
+    #[Assert\Type('int')]
+    #[Assert\PositiveOrZero]
     private ?int $zipcode = null;
 
     #[ORM\Column(length: 10)]
+    #[Assert\Type('string')]
+    #[Assert\Length(min: 1, max: 10)]
     private ?string $region = null;
 
     public function getId(): ?int
