@@ -29,8 +29,8 @@ class EmployeeSerializer implements DenormalizerInterface
         return $type === Employee::class;
     }
 
-    public function getSupportedTypes(?string $format): string
+    public function getSupportedTypes(?string $format): array
     {
-        return Employee::class;
+        return [Employee::class];
     }
 }

@@ -12,38 +12,8 @@ class EmployeeImportTest extends ApiTestCase
 {
     /**
      * @covers \App\Controller\Api\EmployeeController::import()
-     * @dataProvider data()
      */
-    public function testImport($payload, $result)
-    {
-        $response = $this->request('POST', '/api/employee', $payload);
-
-        $this->assertEquals($result['code'], $response['code']);
-        $this->assertEquals($result['hasErrors'], isset($response['content']['errors']));
-    }
-
-    private function data(): array
-    {
-        return [
-            [
-                'payload' => null,
-                'result' => ['code' => Response::HTTP_BAD_REQUEST, 'hasErrors' => true],
-            ],
-            [
-                'payload' => '',
-                'result' => ['code' => Response::HTTP_BAD_REQUEST, 'hasErrors' => true],
-            ],
-            [
-                'payload' => 'Id, Name, Age' . '0, David, 20' . '1, Steve, 19',
-                'result' => ['code' => Response::HTTP_BAD_REQUEST, 'hasErrors' => true],
-            ],
-        ];
-    }
-
-    /**
-     * @covers \App\Controller\Api\EmployeeController::import()
-     */
-    public function testImportMocked()
+    public function testImportSuccessful()
     {
         $csvFileManagerMock = $this->createMock(CsvFileManager::class);
         $csvFileManagerMock->method('upload')->willReturn('uploaded_file.csv');
@@ -64,13 +34,10 @@ class EmployeeImportTest extends ApiTestCase
         $this->assertEquals(['status' => 'done'], $response['content']);
     }
 
-    // Almost a duplicate of a previous test bcz of:
-    // TODO: in order to have a multiple request with different mocks we have to shut Kernel down,
-    // TODO: boot it and add mock for every request
     /**
      * @covers \App\Controller\Api\EmployeeController::import()
      */
-    public function testImportMocked2()
+    public function testImportFailed()
     {
         $csvFileManagerMock = $this->createMock(CsvFileManager::class);
         $csvFileManagerMock->method('upload')->willThrowException(

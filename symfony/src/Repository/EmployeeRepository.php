@@ -44,7 +44,7 @@ class EmployeeRepository extends ServiceEntityRepository
     public function insertIgnore(array $params): void
     {
         $sql = $this->getEntityManager()->getConnection()->createQueryBuilder()
-            ->insert($this->getEntityName())
+            ->insert('employee')
             ->values(array_fill_keys(array_keys($params), '?'))
             ->setParameters($params)
             ->getSQL();
