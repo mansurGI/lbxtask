@@ -26,3 +26,5 @@ services:
     App\Storage\LocalStorage:
         arguments:
             $storagePath: '%kernel.project_dir%/var/storage'
+
+    App\Connection\BatchConnection: '@doctrine.dbal.batch_connection'

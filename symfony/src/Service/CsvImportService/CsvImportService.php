@@ -2,11 +2,11 @@
 
 namespace App\Service\CsvImportService;
 
+use App\Connection\BatchConnection;
 use App\CsvFieldsSet\EmployeeCsvFieldsSet;
 use App\Entity\Employee;
 use App\Service\CsvImportService\Exceptions\MaxDatabaseInsertErrorsReached;
 use App\Service\CsvImportService\Exceptions\ParsingException;
-use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -22,7 +22,7 @@ class CsvImportService
         private readonly LoggerInterface $logger,
         private readonly SerializerInterface $serializer,
         private readonly ValidatorInterface $validator,
-        private readonly EntityManagerInterface $doctrine,
+        private readonly BatchConnection $connection,
     )
     {
     }
@@ -64,11 +64,11 @@ class CsvImportService
             }
 
             if ($inserted === 0) {
-                $this->doctrine->getConnection()->beginTransaction();
+                $this->connection->beginTransaction();
             }
 
             try {
-                $this->doctrine->getRepository(Employee::class)->insertIgnore($this->serializer->normalize($employee));
+                $this->connection->insertIgnore('employee', $this->serializer->normalize($employee));
             } catch (\Throwable $exception) {
                 $this->logger->error('Doctrine insert error', [
                     'exception' => $exception,
@@ -83,14 +83,12 @@ class CsvImportService
 
             if ($inserted >= 20) {
                 $inserted = 0;
-                $this->doctrine->getConnection()->commit();
-                $this->doctrine->clear();
+                $this->connection->commit();
             }
         }
 
         if ($inserted !== 0) {
-            $this->doctrine->getConnection()->commit();
-            $this->doctrine->clear();
+            $this->connection->commit();
         }
     }
 }
