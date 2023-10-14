@@ -15,6 +15,7 @@ doctrine:
                 logging: false
                 profiling: false
                 profiling_collect_backtrace: false
+                wrapper_class: App\Connection\BatchConnection
 
     orm:
         auto_generate_proxy_classes: true
