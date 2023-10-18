@@ -6,9 +6,9 @@ Test task by Mansur Gainetdinov
 
 Requirements: bash, docker, docker compose plugin, curl
 
-There is 2 ways to use this project. First - run it on local machine. Second - use it from
-my personal server (project will be available on my server for a few weeks).
-So you can skip this part and go straight to "Use" section with my server IP = 185.43.6.137
+There is 2 ways to use this project. First - run it on local machine. Second - use it from my personal server (project
+will be available on my server for a few weeks). So you can skip this part and go straight to "Use" section with my
+server IP = 185.43.6.137
 
 Or execute this command to start a project.
 
@@ -99,8 +99,10 @@ The problem with scaling might be just a MySQL (max connections, maximum through
 - Testings: test executing flow = unit -> integration -> application
 
 # Stop and Uninstall
+
 Execute this lines to stop all containers and delete images, then delete lbx folder
 (!LOOK AT CODE BEFORE EXECUTING!)
+
 ```
 docker compose down
 

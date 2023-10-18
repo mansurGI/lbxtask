@@ -14,9 +14,7 @@ class IndexController extends AbstractController
     {
         $output = [];
         exec('php /app/bin/test.php', $output);
-        //array_map(function ($value) { echo $value . PHP_EOL; }, $output);
         dd($output);
-        //dd($employeeRepository->findAll());
         return $this->json([
             'message' => 'Welcome to your new controller!',
             'path' => 'src/Controller/IndexController.php',
