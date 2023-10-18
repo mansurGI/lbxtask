@@ -4,8 +4,8 @@ echo 'START OF INSTALLING'
 
 echo 'building docker'
 cd fpm || exit
-# add --quite
-docker build --tag php-fpm-custom:latest .
+
+docker build --quite --tag php-fpm-custom:latest .
 cd ..
 
 echo 'docker up'
@@ -21,4 +21,7 @@ docker exec database mariadb -u root -proot --execute='create database if not ex
 echo 'migrating migrations to databases'
 docker exec fpm php /app/bin/console doctrine:migrations:migrate --env=dev --no-interaction
 docker exec fpm php /app/bin/console doctrine:migrations:migrate --env=test --no-interaction
+
+echo 'starting message consumer'
+docker exec --detach fpm php bin/console messenger:consume async
 

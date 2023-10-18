@@ -2,6 +2,7 @@
 
 namespace App\Tests\Unit\CsvFieldsSet;
 
+use App\CsvFieldsSet\EmployeeCsvFieldsSet;
 use PHPUnit\Framework\TestCase;
 
 class EmployeeCsvFieldsSetTest extends TestCase
@@ -12,7 +13,7 @@ class EmployeeCsvFieldsSetTest extends TestCase
      */
     public function testFromHeader(array $header, array $result)
     {
-
+        $this->assertEquals($result, EmployeeCsvFieldsSet::fromHeader($header));
     }
 
     private function data(): array
@@ -64,7 +65,7 @@ class EmployeeCsvFieldsSetTest extends TestCase
             ],
             [
                 'header' => [
-                    'Eid',
+                    'Emp',
                     'Name Prefix',
                     'prefix',
                     'User NAME',
@@ -73,9 +74,9 @@ class EmployeeCsvFieldsSetTest extends TestCase
                 'result' => [
                     'eid',
                     'prefix',
-                    '3',
+                    '2',
                     'username',
-                    '5',
+                    '4',
                 ],
             ],
             [

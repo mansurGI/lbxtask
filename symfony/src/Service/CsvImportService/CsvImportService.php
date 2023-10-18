@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CsvImportService
 {
     const MAX_DATABASE_INSERT_ERRORS = 20;
+    const MAX_DATABASE_TRANSACTION_SIZE = 20;
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -80,7 +81,7 @@ class CsvImportService
             }
             $inserted++;
 
-            if ($inserted >= 20) {
+            if ($inserted >= self::MAX_DATABASE_TRANSACTION_SIZE) {
                 $inserted = 0;
                 $this->connection->commit();
             }

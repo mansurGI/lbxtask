@@ -21,7 +21,7 @@ class CsvImportServiceTest extends KernelTestCase
         /** @var EntityManagerInterface $doctrine */
         $doctrine = self::getContainer()->get(EntityManagerInterface::class);
 
-        //fixtures from test.php will add 2 employees TODO: database purge, fixtures before each test
+        // TODO: database drop/truncate, migrations, fixtures load before each test - PHPUnitExtension or a trait.
         $this->assertCount($insertions + 2, $doctrine->getRepository(Employee::class)->findAll());
     }
 
