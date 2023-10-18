@@ -31,9 +31,13 @@ class EmployeeCsvFieldsSet implements CsvFieldsSetInterface
         $fieldSet = [];
 
         foreach ($header as $columnPosition => $columnName) {
+            $fieldSet[$columnPosition] = (string) $columnPosition;
+
             foreach (self::$fields as $fieldName => $fieldNameAliases) {
                 if (in_array(mb_strtolower(trim($columnName)), $fieldNameAliases)) {
-                    $fieldSet[$columnPosition] = $fieldName;
+                    if (false === in_array($fieldName, $fieldSet)) {
+                        $fieldSet[$columnPosition] = $fieldName;
+                    }
                 }
             }
         }

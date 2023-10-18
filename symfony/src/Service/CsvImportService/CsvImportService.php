@@ -16,8 +16,6 @@ class CsvImportService
 {
     const MAX_DATABASE_INSERT_ERRORS = 20;
 
-    private int $insertErrors = 0;
-
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly SerializerInterface $serializer,
@@ -48,6 +46,7 @@ class CsvImportService
         }
 
         $inserted = 0;
+        $insertErrors = 0;
         foreach ($records as $record) {
             try {
                 /** @var Employee $employee */
@@ -73,8 +72,8 @@ class CsvImportService
                 $this->logger->error('Doctrine insert error', [
                     'exception' => $exception,
                 ]);
-                $this->insertErrors++;
-                if ($this->insertErrors >= self::MAX_DATABASE_INSERT_ERRORS) {
+                $insertErrors++;
+                if ($insertErrors >= self::MAX_DATABASE_INSERT_ERRORS) {
                     throw new MaxDatabaseInsertErrorsReached();
                 }
                 continue;

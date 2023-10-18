@@ -20,4 +20,5 @@ docker exec database mariadb -u root -proot --execute='create database if not ex
 
 echo 'migrating migrations to databases'
 docker exec fpm php /app/bin/console doctrine:migrations:migrate --env=dev --no-interaction
+docker exec fpm php /app/bin/console doctrine:migrations:migrate --env=test --no-interaction
 
