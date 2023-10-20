@@ -48,8 +48,8 @@ GET 127.0.0.1:180/api/employee/777777
 # A little about project
 
 Import route gets a request content as stream. Saves it into our selected storage. Passes a message with name of file to
-queue. The handler gets a file, passes it to csv parsing library and reads row by row. Each row is serialized, validated
-and INSERT IGNORE in database inside a 20 statements transaction.
+queue. The handler gets a file from storage, passes it to csv parsing library and reads row by row. Each row is
+serialized, validated and INSERT IGNORE in database inside a 20 statements transaction.
 
 The code is ready to add new .csv files types (more or less columns), to add new storages and connections.
 
@@ -65,14 +65,14 @@ The FPM config disables opcache for easier development.
 
 For batch insert I have created a new Connection with an 'INSERT IGNORE' statement (so all unique violations go as
 warnings). Every batch is 20 statements. We also have a MAX_ERRORS constant (20 errors max) for predictability of time
-costs. So we know that a broken file will not kill our database, our consumer.
+costs. So we know that a broken file will not kill our database, our consumer and will not take infinit amount of time.
 
 There is some Unit tests for things that can be tested without Kernel. There is no Application level tests, because all
 is already tested at Integration level. Some things just don't need to be tested (like a LocalStorage), because there is
 no functionality to test.
 
-There is a CsvFieldsSet. It gets a header of a .csv file and gives a new with correct column names by alias, filled
-unknown columns. It exists to secure column position changes, name changes (it has alias for Employee fields)
+There is a CsvFieldsSet. It gets a header of a .csv file and gives a corrected version. It exists to secure column
+position changes, name changes (it has alias for Employee fields)
 
 There is only one way to message be handled again (3 retries with 1 sec delay) - Doctrine Connection Exception (database
 is out of service). Any other errors will write to log, because there is no automated way to handle wrong files. (Even
@@ -100,7 +100,7 @@ The problem with scaling might be just a MySQL (max connections, maximum through
 
 # Stop and Uninstall
 
-Execute this lines to stop all containers and delete images, then delete lbx folder
+Execute this lines to stop all containers and delete images, then delete lbx-test-task folder
 (!LOOK AT CODE BEFORE EXECUTING!)
 
 ```
