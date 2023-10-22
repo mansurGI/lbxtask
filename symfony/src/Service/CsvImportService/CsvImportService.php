@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CsvImportService
 {
     const MAX_DATABASE_INSERT_ERRORS = 20;
-    const MAX_DATABASE_TRANSACTION_SIZE = 20;
+    const BATCH_SIZE = 20;
 
     public function __construct(
         private readonly LoggerInterface $logger,
@@ -48,6 +48,7 @@ class CsvImportService
 
         $inserted = 0;
         $insertErrors = 0;
+        $employees = [];
         foreach ($records as $record) {
             try {
                 /** @var Employee $employee */
@@ -65,30 +66,46 @@ class CsvImportService
 
             if ($inserted === 0) {
                 $this->connection->beginTransaction();
+                $employees = [];
             }
 
-            try {
-                $this->connection->insertIgnore('employee', $this->serializer->normalize($employee));
-            } catch (\Throwable $exception) {
-                $this->logger->error('Doctrine insert error', [
-                    'exception' => $exception,
-                ]);
-                $insertErrors++;
-                if ($insertErrors >= self::MAX_DATABASE_INSERT_ERRORS) {
-                    throw new MaxDatabaseInsertErrorsReached();
-                }
-                continue;
-            }
+            $employees[] = $this->serializer->normalize($employee);
             $inserted++;
 
-            if ($inserted >= self::MAX_DATABASE_TRANSACTION_SIZE) {
+            if ($inserted >= self::BATCH_SIZE) {
                 $inserted = 0;
+                try {
+                    $this->connection->insertIgnore('employee', $employees);
+                } catch (\Throwable $exception) {
+                    $this->logger->error('Doctrine insert error', [
+                        'exception' => $exception,
+                    ]);
+
+                    $this->connection->rollBack();
+
+                    $insertErrors++;
+                    if ($insertErrors >= self::MAX_DATABASE_INSERT_ERRORS) {
+                        throw new MaxDatabaseInsertErrorsReached();
+                    }
+
+                    continue;
+                }
+
                 $this->connection->commit();
             }
         }
 
         if ($inserted !== 0) {
-            $this->connection->commit();
+            try {
+                $this->connection->insertIgnore('employee', $employees);
+                $this->connection->commit();
+            } catch (\Throwable $exception) {
+                $this->logger->error('Doctrine insert error', [
+                    'exception' => $exception,
+                ]);
+
+                $this->connection->rollBack();
+            }
         }
     }
 }
