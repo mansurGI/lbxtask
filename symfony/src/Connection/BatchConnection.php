@@ -24,9 +24,9 @@ class BatchConnection extends \Doctrine\DBAL\Connection
         }
 
         // multiple rows or one
-        if (is_array($data[0])) {
+        if (is_array($data[array_key_first($data)])) {
             $columns = implode(', ', array_keys($data[0]));
-            $values = call_user_func_array('array_merge', $data);
+            $values = array_merge(...array_map('array_values', $data));
             $set = '(' . implode(', ', array_fill(0, count($data[0]), '?')) . ')';
             $set = implode(', ', array_fill(0, count($data), $set));
         } else {

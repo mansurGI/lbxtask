@@ -22,7 +22,7 @@ class CsvImportServiceTest extends KernelTestCase
         $doctrine = self::getContainer()->get(EntityManagerInterface::class);
 
         // TODO: database drop/truncate, migrations, fixtures load before each test - PHPUnitExtension or a trait.
-        $this->assertCount($insertions + 2, $doctrine->getRepository(Employee::class)->findAll());
+        $this->assertCount($insertions + 5, $doctrine->getRepository(Employee::class)->findAll());
     }
 
     private function data(): array
