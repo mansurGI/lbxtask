@@ -27,7 +27,7 @@ services:
     ports:
       - '3306:3306'
     environment:
-      MARIADB_ROOT_PASSWORD: root
+      MARIADB_ROOT_PASSWORD: sTlInaYSVdVnmv9uYI2gfj
     volumes:
       - ./mariadb/data:/var/lib/mysql
   rabbit:
@@ -39,7 +39,7 @@ services:
       - '5672:5672'
     environment:
       RABBITMQ_USERNAME: 'root'
-      RABBITMQ_PASSWORD: 'root'
+      RABBITMQ_PASSWORD: 'sTlInaYSVdVnmv9uYI2gfj'
 
 
 networks:
